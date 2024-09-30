@@ -1,0 +1,5 @@
+repo
+builddir
+.flatpak-builder
+.zed
+flatpak-pip-generator

@@ -1,0 +1,73 @@
+{
+  "id": "dev.buonhobo.KatharaGUI",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "47",
+  "sdk": "org.gnome.Sdk",
+  "command": "/app/bin/KatharaGUI.sh",
+  "finish-args": [
+    "--device=all",
+    "--device=dri",
+    "--share=ipc",
+    "--socket=wayland",
+    "--filesystem=/run/docker.sock",
+    "--talk-name=org.freedesktop.Flatpak",
+    "--filesystem=home",
+    "--filesystem=xdg-run/gvfsd",
+    "--socket=session-bus"
+  ],
+  "modules": [
+    "python3-requirements.json",
+    "python3-pyyaml.json",
+    "python3-hatchling.json",
+    "python3-pygments.json",
+    {
+      "name": "vte",
+      "buildsystem": "meson",
+      "config-opts": ["--buildtype=release", "-Dgtk3=false", "-Dgtk4=true"],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/vte.git"
+        }
+      ]
+    },
+    {
+      "name": "KatharaGUI",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm755 frontend.py /app/bin/KatharaGUI.py",
+        "install -Dm755 KatharaGUI.sh /app/bin/KatharaGUI.sh",
+        "install -Dm755 connect.py /app/bin/connect.py",
+        "install -Dm755 dev.buonhobo.KatharaGUI.desktop /app/share/applications/dev.buonhobo.KatharaGUI.desktop",
+        "install -Dm755 logo.png /app/share/icons/hicolor/128x128/apps/dev.buonhobo.KatharaGUI.png"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "frontend.py",
+          "dest-filename": "frontend.py"
+        },
+        {
+          "type": "script",
+          "commands": ["bash -c 'python3 /app/bin/KatharaGUI.py'"],
+          "dest-filename": "KatharaGUI.sh"
+        },
+        {
+          "type": "file",
+          "path": "./connect.py",
+          "dest-filename": "connect.py"
+        },
+        {
+          "type": "file",
+          "path": "./logo.png",
+          "dest-filename": "logo.png"
+        },
+        {
+          "type": "inline",
+          "dest-filename": "dev.buonhobo.KatharaGUI.desktop",
+          "contents": "[Desktop Entry]\nVersion=1.0\nType=Application\nName=KatharaGUI\nComment=A simple Kathara GUI\nIcon=dev.buonhobo.KatharaGUI\nTerminal=false\nCategories=Utility;Application;"
+        }
+      ]
+    }
+  ]
+}
