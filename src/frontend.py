@@ -83,10 +83,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
         content = Adw.ToolbarView()
         header = Adw.HeaderBar()
+        header.set_show_title(True)
         content.add_top_bar(header)
         content.set_content(main_box)
-
-
         return main_box
 
     def get_containers_rows(self):
