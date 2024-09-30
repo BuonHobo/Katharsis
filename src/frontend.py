@@ -32,6 +32,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def get_content(self):
         content = Adw.ToolbarView()
         header = Adw.HeaderBar()
+        header.set_show_title(False)
         content.add_top_bar(header)
         content.set_size_request(400, 300)
         content.set_content(self.get_terminal())
@@ -41,7 +42,7 @@ class MainWindow(Gtk.ApplicationWindow):
         terminal = Vte.Terminal()
 
         terminal.set_clear_background(False)
-        terminal.set_margin_top(20)
+        # terminal.set_margin_top(20)
         terminal.set_margin_bottom(20)
         terminal.set_margin_end(20)
         terminal.set_margin_start(20)
@@ -79,6 +80,13 @@ class MainWindow(Gtk.ApplicationWindow):
         main_box.append(self.get_top_commands())
 
         main_box.append(self.scrolled_window)
+
+        content = Adw.ToolbarView()
+        header = Adw.HeaderBar()
+        content.add_top_bar(header)
+        content.set_content(main_box)
+
+
         return main_box
 
     def get_containers_rows(self):
