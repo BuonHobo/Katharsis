@@ -1,5 +1,5 @@
 {
-  "id": "dev.buonhobo.KatharaGUI",
+  "id": "io.github.buonhobo.KatharaGUI",
   "runtime": "org.gnome.Platform",
   "runtime-version": "47",
   "sdk": "org.gnome.Sdk",
@@ -38,13 +38,14 @@
         "install -Dm755 frontend.py /app/bin/KatharaGUI.py",
         "install -Dm755 KatharaGUI.sh $FLATPAK_DEST/bin/KatharaGUI.sh",
         "install -Dm755 connect.py /app/bin/connect.py",
-        "install -Dm755 dev.buonhobo.KatharaGUI.desktop /app/share/applications/dev.buonhobo.KatharaGUI.desktop",
-        "install -Dm755 KatharaGUI.svg /app/share/icons/hicolor/scalable/apps/dev.buonhobo.KatharaGUI.svg"
+        "install -Dm755 io.github.buonhobo.KatharaGUI.desktop /app/share/applications/io.github.buonhobo.KatharaGUI.desktop",
+        "install -Dm755 KatharaGUI.svg /app/share/icons/hicolor/scalable/apps/io.github.buonhobo.KatharaGUI.svg",
+        "install -Dm755 io.github.buonhobo.KatharaGUI.metainfo.xml /app/share/metainfo/io.github.buonhobo.KatharaGUI.metainfo.xml"
       ],
       "sources": [
         {
           "type": "file",
-          "path": "frontend.py",
+          "path": "src/frontend.py",
           "dest-filename": "frontend.py"
         },
         {
@@ -54,18 +55,23 @@
         },
         {
           "type": "file",
-          "path": "./connect.py",
+          "path": "src/connect.py",
           "dest-filename": "connect.py"
         },
         {
           "type": "file",
-          "path": "./KatharaGUI.svg",
+          "path": "data/KatharaGUI.svg",
           "dest-filename": "KatharaGUI.svg"
         },
         {
+          "type": "file",
+          "path": "io.github.buonhobo.KatharaGUI.metainfo.xml",
+          "dest-filename": "io.github.buonhobo.KatharaGUI.metainfo.xml"
+        },
+        {
           "type": "inline",
-          "dest-filename": "dev.buonhobo.KatharaGUI.desktop",
-          "contents": "[Desktop Entry]\nVersion=1.0\nType=Application\nName=KatharaGUI\nComment=A simple Kathara GUI\nIcon=dev.buonhobo.KatharaGUI\nTerminal=false\nCategories=Utility;Application;"
+          "dest-filename": "io.github.buonhobo.KatharaGUI.desktop",
+          "contents": "[Desktop Entry]\nVersion=1.0\nType=Application\nName=KatharaGUI\nExec=KatharaGUI.sh\nComment=A simple Kathara GUI\nIcon=io.github.buonhobo.KatharaGUI\nTerminal=false\nCategories=Utility;Application;"
         }
       ]
     }

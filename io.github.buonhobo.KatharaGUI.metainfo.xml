@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2024 Alex Bonini -->
 <component type="desktop">
-  <id>dev.buonhobo.KatharaGUI</id>
+  <id>io.github.buonhobo.KatharaGUI</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
@@ -9,7 +9,7 @@
   <summary>A simple Kathara GUI to make experimentation easier</summary>
 
   <developer_name>Alex Bonini</developer_name>
-  <developer id="dev.buonhobo">
+  <developer id="io.github.buonhobo">
     <name>Alex Bonini</name>
   </developer>
 
@@ -43,7 +43,7 @@
     </screenshot>
   </screenshots>
 
-  <launchable type="desktop-id">dev.buonhobo.KatharaGUI.desktop</launchable>
+  <launchable type="desktop-id">io.github.buonhobo.KatharaGUI.desktop</launchable>
 
   <categories>
     <category>Utility</category>

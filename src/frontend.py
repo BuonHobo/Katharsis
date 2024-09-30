@@ -221,7 +221,7 @@ class MyApp(Adw.Application):
 
 
 def main():
-    app = MyApp(application_id="dev.buonhobo.KatharaGUI")
+    app = MyApp(application_id="io.github.buonhobo.KatharaGUI")
     app.run(sys.argv)
 
 
