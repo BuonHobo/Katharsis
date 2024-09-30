@@ -10,7 +10,6 @@
     "--share=ipc",
     "--socket=wayland",
     "--filesystem=/run/docker.sock",
-    "--talk-name=org.freedesktop.Flatpak",
     "--filesystem=home",
     "--filesystem=xdg-run/gvfsd",
     "--socket=session-bus"
@@ -40,7 +39,7 @@
         "install -Dm755 KatharaGUI.sh /app/bin/KatharaGUI.sh",
         "install -Dm755 connect.py /app/bin/connect.py",
         "install -Dm755 dev.buonhobo.KatharaGUI.desktop /app/share/applications/dev.buonhobo.KatharaGUI.desktop",
-        "install -Dm755 logo.png /app/share/icons/hicolor/128x128/apps/dev.buonhobo.KatharaGUI.png"
+        "install -Dm755 logo.png /app/share/icons/hicolor/512x512/apps/dev.buonhobo.KatharaGUI.png"
       ],
       "sources": [
         {
