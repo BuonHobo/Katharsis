@@ -3,16 +3,16 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "47",
   "sdk": "org.gnome.Sdk",
-  "command": "/app/bin/KatharaGUI.sh",
+  "command": "KatharaGUI.sh",
   "finish-args": [
     "--device=all",
     "--device=dri",
     "--share=ipc",
+    "--socket=fallback-x11",
     "--socket=wayland",
     "--filesystem=/run/docker.sock",
     "--filesystem=home",
-    "--filesystem=xdg-run/gvfsd",
-    "--socket=session-bus"
+    "--filesystem=xdg-run/gvfsd"
   ],
   "modules": [
     "python3-requirements.json",
@@ -36,7 +36,7 @@
       "buildsystem": "simple",
       "build-commands": [
         "install -Dm755 frontend.py /app/bin/KatharaGUI.py",
-        "install -Dm755 KatharaGUI.sh /app/bin/KatharaGUI.sh",
+        "install -Dm755 KatharaGUI.sh $FLATPAK_DEST/bin/KatharaGUI.sh",
         "install -Dm755 connect.py /app/bin/connect.py",
         "install -Dm755 dev.buonhobo.KatharaGUI.desktop /app/share/applications/dev.buonhobo.KatharaGUI.desktop",
         "install -Dm755 KatharaGUI.svg /app/share/icons/hicolor/scalable/apps/dev.buonhobo.KatharaGUI.svg"
