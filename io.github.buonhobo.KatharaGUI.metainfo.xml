@@ -31,15 +31,15 @@
   <screenshots>
     <screenshot type="default">
       <caption>KatharaGUI when connected to a machine</caption>
-      <image>https://i.imgur.com/LFGFFaB.png</image>
+      <image>https://github.com/BuonHobo/KatharaGUI/blob/main/data/screenshots/LFGFFaB.png</image>
     </screenshot>
     <screenshot>
       <caption>KatharaGUI when starting a lab</caption>
-      <image>https://i.imgur.com/4gseSSV.png</image>
+      <image>https://github.com/BuonHobo/KatharaGUI/blob/main/data/screenshots/4gseSSV.png</image>
     </screenshot>
     <screenshot>
       <caption>KatharaGUI when not connected to any lab</caption>
-      <image>https://i.imgur.com/AD7swPI.png</image>
+      <image>https://github.com/BuonHobo/KatharaGUI/blob/main/data/screenshots/AD7swPI.png</image>
     </screenshot>
   </screenshots>
 
