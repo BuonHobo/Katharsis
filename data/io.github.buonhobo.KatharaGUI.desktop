@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=KatharaGUI
+Exec=KatharaGUI
+Comment=A simple Kathara GUI
+Icon=io.github.buonhobo.KatharaGUI
+Terminal=falseCategories=Utility;Application;
