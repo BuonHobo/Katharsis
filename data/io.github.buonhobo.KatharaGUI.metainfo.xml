@@ -31,15 +31,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>KatharaGUI when connected to a machine</caption>
-      <image>https://i.imgur.com/LFGFFaB.png</image>
+      <image>https://i.imgur.com/ZegwoJY.png</image>
     </screenshot>
     <screenshot>
       <caption>KatharaGUI when starting a lab</caption>
-      <image>https://i.imgur.com/4gseSSV.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>KatharaGUI when not connected to any lab</caption>
-      <image>https://i.imgur.com/AD7swPI.png</image>
+      <image>https://i.imgur.com/iCvHXax.png</image>
     </screenshot>
   </screenshots>
 
