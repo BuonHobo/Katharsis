@@ -120,7 +120,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def get_top_commands(self):
         top_box = Adw.PreferencesGroup()
-        top_box.set_margin_top(20)
+        top_box.set_margin_top(5)
         top_box.set_margin_bottom(20)
         top_box.set_margin_end(20)
         top_box.set_margin_start(20)
