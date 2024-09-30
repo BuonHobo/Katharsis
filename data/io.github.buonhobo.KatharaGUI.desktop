@@ -5,4 +5,5 @@ Name=KatharaGUI
 Exec=KatharaGUI
 Comment=A simple Kathara GUI
 Icon=io.github.buonhobo.KatharaGUI
-Terminal=falseCategories=Utility;Application;
+Terminal=false
+Categories=Utility;Application;
