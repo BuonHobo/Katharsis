@@ -197,7 +197,7 @@ class MainWindow(Gtk.ApplicationWindow):
         t.spawn_async(
             Vte.PtyFlags.DEFAULT,
             None,
-            ["python", "-m", "kathara", "lrestart", "-d", lab],
+            ["python", "-m", "kathara", "lrestart","--noterminals", "-d", lab],
             None,
             GLib.SpawnFlags.DEFAULT,
             None,
