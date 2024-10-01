@@ -94,6 +94,7 @@ class MainWindow(Gtk.ApplicationWindow):
         group.set_margin_end(20)
         group.set_margin_start(20)
         for container in self.containers:
+            print(container.labels)
             btn = Adw.ButtonRow()
             content = Adw.ButtonContent()
             content.set_label(container.labels["name"])

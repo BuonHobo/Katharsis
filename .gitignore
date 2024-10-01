@@ -3,3 +3,5 @@ builddir
 .flatpak-builder
 .zed
 flatpak-pip-generator
+.idea
+__pycache__
