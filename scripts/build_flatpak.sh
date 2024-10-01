@@ -1,0 +1,1 @@
+flatpak run org.flatpak.Builder --force-clean --install --user --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ --repo=repo builddir flatpak/io.github.buonhobo.KatharaGUI.json
