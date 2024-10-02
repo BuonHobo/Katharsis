@@ -20,7 +20,7 @@ class MyApp(Adw.Application):
 
 
 app = MyApp(
-    application_id="io.github.buonhobo.KatharaGUI",
+    application_id="io.github.buonhobo.Katharsis",
     flags=Gio.ApplicationFlags.NON_UNIQUE,
 )
 app.run(sys.argv)

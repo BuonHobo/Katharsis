@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=KatharaGUI
-Exec=KatharaGUI
+Name=Katharsis
+Exec=Katharsis
 Comment=A simple Kathara GUI
-Icon=io.github.buonhobo.KatharaGUI
+Icon=io.github.buonhobo.Katharsis
 Terminal=false
 Categories=Utility;Application;

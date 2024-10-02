@@ -1,9 +1,9 @@
 {
-  "id": "io.github.buonhobo.KatharaGUI",
+  "id": "io.github.buonhobo.Katharsis",
   "runtime": "org.gnome.Platform",
   "runtime-version": "47",
   "sdk": "org.gnome.Sdk",
-  "command": "KatharaGUI",
+  "command": "Katharsis",
   "finish-args": [
     "--socket=wayland",
     "--socket=fallback-x11",
@@ -29,14 +29,14 @@
       ]
     },
     {
-      "name": "KatharaGUI",
+      "name": "Katharsis",
       "buildsystem": "simple",
       "build-commands": [
-        "mkdir -p /app/share/KatharaGUI",
-        "cp -r src /app/share/KatharaGUI",
-        "install -Dm755 KatharaGUI /app/bin/KatharaGUI",
-        "install -Dm755 data/io.github.buonhobo.KatharaGUI.desktop /app/share/applications/io.github.buonhobo.KatharaGUI.desktop",
-        "install -Dm755 data/KatharaGUI.svg /app/share/icons/hicolor/scalable/apps/io.github.buonhobo.KatharaGUI.svg"
+        "mkdir -p /app/share/Katharsis",
+        "cp -r src /app/share/Katharsis",
+        "install -Dm755 Katharsis /app/bin/Katharsis",
+        "install -Dm755 data/io.github.buonhobo.Katharsis.desktop /app/share/applications/io.github.buonhobo.Katharsis.desktop",
+        "install -Dm755 data/Katharsis.svg /app/share/icons/hicolor/scalable/apps/io.github.buonhobo.Katharsis.svg"
       ],
       "sources": [
         {
@@ -45,8 +45,8 @@
         },
         {
           "type": "script",
-          "dest-filename": "KatharaGUI",
-          "commands": ["python /app/share/KatharaGUI/src/KatharaGUI.py"]
+          "dest-filename": "Katharsis",
+          "commands": ["python /app/share/Katharsis/src/Katharsis.py"]
         }
       ]
     }
