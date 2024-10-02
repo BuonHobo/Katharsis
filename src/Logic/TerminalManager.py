@@ -6,7 +6,6 @@ from UI.Terminal import Terminal
 class TerminalManager:
     def __init__(self):
         self.terminals: dict[Container, Terminal] = {}
-        GUIManager.get_instance().subscribe("wiped", self.remove_all_terminals)
 
     def get_terminal(self, container: Container):
         if container in self.terminals:
@@ -32,6 +31,3 @@ Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{c
     def remove_terminal(self, container: Container):
         if container in self.terminals:
             self.terminals.pop(container)
-
-    def remove_all_terminals(self):
-        self.terminals.clear()

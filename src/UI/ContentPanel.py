@@ -33,6 +33,7 @@ class ContentPanel(Gtk.Box):
     def set_terminal(self, terminal: Terminal):
         if self.content.get_content() is not terminal:
             self.content.set_content(terminal)
+            terminal.grab_focus()
 
     def on_connect_container(self, container):
         terminal = self.terminal_manager.get_terminal(container)

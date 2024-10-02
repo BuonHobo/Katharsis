@@ -11,7 +11,6 @@ class DetachedPanel(Gtk.Window):
         self.set_child(Panel(term))
         self.container: Container = container
         self.term: Terminal = term
-        GUIManager.get_instance().subscribe("wiped", self.close)
         GUIManager.get_instance().subscribe("terminal_exited", self.on_terminal_exited)
 
     def do_close_request(self):

@@ -7,7 +7,7 @@ from Logic.GUIManager import GUIManager
 class ContainerList(Gtk.ScrolledWindow):
     def __init__(self):
         super().__init__(vexpand=True)
-        self.containers: dict[Container, Gtk.Button] = {}
+        self.containers: dict[Container, Adw.ActionRow] = {}
         self.status_page = Adw.StatusPage(icon_name="dialog-question", title="No Running Labs",
                                           description="Start a Lab or reload to see your devices")
         self.containers_rows = Adw.PreferencesGroup(margin_end=10, margin_start=10)
@@ -20,9 +20,9 @@ class ContainerList(Gtk.ScrolledWindow):
     def get_row2(self, container: Container):
         row = Adw.ActionRow(
             title=container.name,
-            activatable=True)
+            activatable=True,tooltip_text=f"Connect to {container.name}")
         row.add_prefix(Gtk.Image(icon_name="utilities-terminal-symbolic", pixel_size=20))
-        cut = Gtk.Button(icon_name="edit-cut-symbolic", has_frame=False, margin_top=5, margin_bottom=5)
+        cut = Gtk.Button(icon_name="edit-cut-symbolic", has_frame=False, margin_top=5, margin_bottom=5,tooltip_text=f"Connect to {container.name} in a different window")
         row.add_suffix(cut)
         row.connect(
             "activated",

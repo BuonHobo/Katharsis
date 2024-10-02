@@ -17,7 +17,6 @@ class GUIManager:
         self.dialog = Gtk.FileDialog()
         self.dialog.set_title("Select a lab directory")
         self.subscribers: dict[str, list[Callable]] = {
-            "wiped": [],
             "lab_started": [],
             "reload": [],
             "set_terminal": [],
@@ -70,7 +69,6 @@ class GUIManager:
         self.reload()
 
     def on_wipe_finished(self, term: Terminal, status: int):
-        self.notify_subscribers("wiped")
         self.reload()
 
     def reload(self):
