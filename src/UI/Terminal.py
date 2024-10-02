@@ -1,17 +1,14 @@
+from typing import Optional
+
 from gi.repository import Vte, GLib
 
 
 class Terminal(Vte.Terminal):
     def __init__(self):
-        super().__init__()
-
+        super().__init__(margin_top=5, margin_bottom=20, margin_start=30, margin_end=20, bold_is_bright=True)
         self.set_clear_background(False)
-        self.set_margin_bottom(20)
-        self.set_margin_end(20)
-        self.set_margin_start(20)
-        self.set_bold_is_bright(True)
 
-    def run(self, command:list[str],working_dir=None):
+    def run(self, command: list[str], working_dir: Optional[str] = None):
         self.spawn_async(
             Vte.PtyFlags.DEFAULT,
             working_dir,
@@ -21,6 +18,5 @@ class Terminal(Vte.Terminal):
             None,
             None,
             -1,
-            None,
             None,
         )

@@ -1,57 +1,60 @@
 from gi.repository import Gtk, Adw
+
 from Data.Container import Container
-from UI.ContainerRow import ContainerRow
 from Logic.GUIManager import GUIManager
+
 
 class ContainerList(Gtk.ScrolledWindow):
     def __init__(self):
-        super().__init__()
-        self.set_margin_bottom(20)
-        self.set_vexpand(True)
-        self.containers:dict[Container,ContainerRow]={}
-        self.containers_set = set()
-        self.containers_rows = self.get_containers_rows()
-        self.set_child(self.containers_rows)
-        GUIManager.get_instance().subscribe("reload",self.update_containers)
+        super().__init__(vexpand=True)
+        self.containers: dict[Container, Gtk.Button] = {}
+        self.status_page = Adw.StatusPage(icon_name="dialog-question", title="No Running Labs",
+                                          description="Start a Lab or reload to see your devices")
+        self.containers_rows = Adw.PreferencesGroup(margin_end=10, margin_start=10)
+        self.set_child(self.status_page)
 
-    def get_containers_rows(self):
-        group = Adw.PreferencesGroup()
-        group.set_title("Reload to get containers")
-        group.set_margin_end(20)
-        group.set_margin_start(20)
-        return group
+        GUIManager.get_instance().subscribe("reload", self.update_containers)
+        GUIManager.get_instance().subscribe("detach_container", self.on_container_detached)
+        GUIManager.get_instance().subscribe("attach_container", self.on_attach_container)
 
-    def add_container(self, container):
-        row = self.get_row(container)
-        self.containers[container] = row
-        self.containers_set.add(container)
-        self.containers_rows.add(row)
-        self.containers_rows.set_title("")
-
-    def get_row(self, container):
-        row = Adw.ButtonRow()
-        row.set_size_request(0, 50)
-        row.connect("activated", lambda btn :GUIManager.get_instance().connect_container(container))
-        row.set_title(container.name)
-        row.set_start_icon_name("utilities-terminal-symbolic")
-        row.set_sensitive(container.status == "running")
+    def get_row2(self, container: Container):
+        row = Adw.ActionRow(
+            title=container.name,
+            activatable=True)
+        row.add_prefix(Gtk.Image(icon_name="utilities-terminal-symbolic", pixel_size=20))
+        cut = Gtk.Button(icon_name="edit-cut-symbolic", has_frame=False, margin_top=5, margin_bottom=5)
+        row.add_suffix(cut)
+        row.connect(
+            "activated",
+            lambda btn: GUIManager.get_instance().connect_container(container),
+        )
+        cut.connect("clicked", lambda btn: GUIManager.get_instance().detach_container(container))
         return row
 
-    def remove_container(self, container):
-        if len(self.containers)==0:
-            self.containers_rows.set_title("Reload to get containers")
+    def add_container(self, container: Container):
+        if len(self.containers) == 0:
+            self.set_child(self.containers_rows)
+
+        row = self.get_row2(container)
+        self.containers[container] = row
+        self.containers_rows.add(row)
+
+    def remove_container(self, container: Container):
         row = self.containers.pop(container)
-        self.containers_set.remove(container)
         self.containers_rows.remove(row)
+        if len(self.containers) == 0:
+            self.set_child(self.status_page)
 
-    def update_containers(self, containers):
+    def update_containers(self, containers: list[Container]):
         new_containers_set = set(containers)
-        print(self.containers_set, new_containers_set)
-        for container in new_containers_set - self.containers_set:
-            print("Adding container", container.name)
+        old_containers_set = self.containers.keys()
+        for container in new_containers_set - old_containers_set:
             self.add_container(container)
-        for container in self.containers_set - new_containers_set:
-            print("Removing container", container.name)
-
+        for container in old_containers_set - new_containers_set:
             self.remove_container(container)
-        self.containers_set = new_containers_set
+
+    def on_container_detached(self, container: Container):
+        self.containers[container].set_sensitive(False)
+
+    def on_attach_container(self, container: Container, term):
+        self.containers[container].set_sensitive(True)

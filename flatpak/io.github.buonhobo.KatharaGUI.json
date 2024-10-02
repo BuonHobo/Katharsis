@@ -3,7 +3,7 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "47",
   "sdk": "org.gnome.Sdk",
-  "command": "Kathara",
+  "command": "KatharaGUI",
   "finish-args": [
     "--socket=wayland",
     "--socket=fallback-x11",
@@ -32,8 +32,9 @@
       "name": "KatharaGUI",
       "buildsystem": "simple",
       "build-commands": [
-        "cp -r src /app/bin/KatharaGUI",
-        "install -Dm755 kathara $FLATPAK_DEST/bin/Kathara",
+        "mkdir -p /app/share/KatharaGUI",
+        "cp -r src /app/share/KatharaGUI",
+        "install -Dm755 KatharaGUI /app/bin/KatharaGUI",
         "install -Dm755 data/io.github.buonhobo.KatharaGUI.desktop /app/share/applications/io.github.buonhobo.KatharaGUI.desktop",
         "install -Dm755 data/KatharaGUI.svg /app/share/icons/hicolor/scalable/apps/io.github.buonhobo.KatharaGUI.svg"
       ],
@@ -44,8 +45,8 @@
         },
         {
           "type": "script",
-          "dest-filename": "kathara",
-          "commands": ["python /app/bin/KatharaGUI/new.py"]
+          "dest-filename": "KatharaGUI",
+          "commands": ["python /app/share/KatharaGUI/src/KatharaGUI.py"]
         }
       ]
     }

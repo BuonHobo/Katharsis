@@ -1,32 +1,38 @@
-from gi.repository import Adw
+from typing import Callable
+
+from gi.repository import Gtk
+
 from Logic.GUIManager import GUIManager
 
-class MainButtons(Adw.PreferencesGroup):
+
+class MainButtons(Gtk.Box):
     def __init__(self):
-        super().__init__()
-        self.set_margin_bottom(20)
-        self.set_margin_end(20)
-        self.set_margin_start(20)
-        self.add(self.get_button("media-playback-start-symbolic", "Start lab", self.on_start_lab_button_clicked))
-        self.add(self.get_button("edit-delete-symbolic", "Wipe", self.on_wipe_lab_button_clicked))
-        self.add(self.get_button("view-refresh-symbolic", "Reload", self.on_reload_button_clicked))
+        super().__init__(margin_end=10, margin_start=10, margin_top=15, margin_bottom=15)
+        self.append(
+            self.get_button(
+                "media-playback-start-symbolic",
+                "Start or restart a lab",
+                lambda btn: GUIManager.get_instance().select_lab(),
+            )
+        )
+        self.append(
+            self.get_button(
+                "user-trash-symbolic",
+                "Wipe all labs",
+                lambda btn: GUIManager.get_instance().wipe_all(),
+            )
+        )
+        self.append(
+            self.get_button(
+                "view-refresh-symbolic",
+                "Reload running containers",
+                lambda btn: GUIManager.get_instance().reload(),
+            )
+        )
 
-
-    def get_button(self, icon_name, label, callback):
-        btn = Adw.ButtonRow()
-
-        btn.set_start_icon_name(icon_name)
-        btn.set_title(label)
-        btn.set_size_request(0, 50)
-        btn.connect("activated", callback)
-
+    @staticmethod
+    def get_button(icon_name: str, label: str, callback: Callable):
+        btn = Gtk.Button(icon_name=icon_name, tooltip_text=label, margin_end=5, margin_start=5, height_request=30,
+                         hexpand=True)
+        btn.connect("clicked", callback)
         return btn
-
-    def on_wipe_lab_button_clicked(self, btn):
-        GUIManager.get_instance().wipe_all()
-
-    def on_start_lab_button_clicked(self, btn):
-        GUIManager.get_instance().select_lab()
-
-    def on_reload_button_clicked(self, btn):
-        GUIManager.get_instance().reload()
