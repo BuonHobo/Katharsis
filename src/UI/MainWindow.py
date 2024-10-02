@@ -7,7 +7,7 @@ from UI.Sidebar import Sidebar
 
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, titlebar=Gtk.Box(), title="KatharaGUI")
+        super().__init__(*args, **kwargs, titlebar=Gtk.Box(), title="Katharsis")
         self.set_child(self.get_overlay())
         GUIManager.get_instance().reload()
 
