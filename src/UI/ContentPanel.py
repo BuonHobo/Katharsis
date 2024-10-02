@@ -37,6 +37,7 @@ class ContentPanel(Gtk.Box):
     def on_connect_container(self, container):
         terminal = self.terminal_manager.get_terminal(container)
         self.set_terminal(terminal)
+        terminal.grab_focus()
 
     @staticmethod
     def on_new_window_clicked(widget):
