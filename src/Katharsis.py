@@ -9,6 +9,7 @@ gi.require_version("Vte", "3.91")
 from gi.repository import Adw
 from UI.MainWindow import MainWindow
 from Logic.GUIManager import GUIManager
+from UI.Terminal import Terminal
 
 class MyApp(Adw.Application):
     def __init__(self, **kwargs):
