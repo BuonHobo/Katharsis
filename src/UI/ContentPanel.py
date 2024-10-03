@@ -10,7 +10,7 @@ from UI.TerminalHeaderTitle import TerminalHeaderTitle
 class ContentPanel(Gtk.Box):
     def __init__(self):
         super().__init__(homogeneous=True)
-        self.terminal_manager = TerminalManager()
+        self.terminal_manager = TerminalManager.get_instance()
         GUIManager.get_instance().subscribe("set_terminal", self.set_terminal)
         GUIManager.get_instance().subscribe(
             "connect_container", self.on_connect_container
@@ -25,8 +25,7 @@ class ContentPanel(Gtk.Box):
         t=Terminal()
         self.content.set_content(t)
         self.content.add_top_bar(self.get_header())
-        t.run(["echo", """
-Welcome to Katharsis!
+        t.run(["echo", """Welcome to Katharsis!
 This is a GUI for the Kathara network simulator.
 In order to use this application, you must:
     - Install Docker in rootful mode
@@ -66,7 +65,6 @@ https://github.com/KatharaFramework/Kathara-Labs
         if self.terminal_manager.get_terminal(container).get_parent() is self.content:
             self.content.set_content(Terminal())
             GUIManager.get_instance().wipe_terminal()
-        DetachedPanel(container, self.terminal_manager.get_terminal(container)).present()
 
     def on_attach_container(self, container, term):
         p = term.get_parent()
@@ -76,8 +74,7 @@ https://github.com/KatharaFramework/Kathara-Labs
             self.content.set_content(Terminal())
             GUIManager.get_instance().wipe_terminal()
         else:
-            assert isinstance(p, Adw.ToolbarView)
-            p.set_content(Terminal())
+            term.unparent()
 
     def on_terminal_exited(self, container, term):
         if term.get_parent() is self.content:

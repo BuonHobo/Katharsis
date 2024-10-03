@@ -1,14 +1,28 @@
-from Data.Container import Container
+import Kathara.manager.Kathara
 from Logic.GUIManager import GUIManager
 from UI.Terminal import Terminal
 
 
 class TerminalManager:
-    def __init__(self):
-        self.terminals: dict[Container, Terminal] = {}
 
-    def get_terminal(self, container: Container):
+    instance = None
+
+    def __init__(self):
+        self.terminals: dict[tuple[str,str], Terminal] = {}
+        if TerminalManager.instance is not None:
+            raise Exception("This class is a singleton!")
+        TerminalManager.instance = self
+
+    @classmethod
+    def get_instance(cls):
+        if cls.instance is None:
+            return TerminalManager()
+        return cls.instance
+
+    def get_terminal(self, container: tuple[str,str]):
+        print(self.terminals)
         if container in self.terminals:
+            print("returned terminal")
             return self.terminals[container]
 
         terminal = Terminal()
@@ -18,8 +32,8 @@ class TerminalManager:
                 "-c",
                 f"""
 from Kathara.manager.Kathara import Kathara
-print("Connecting to", '{container.name}' + '...')
-Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{container.lab_hash}')
+print("Connecting to", '{container[0]}' + '...')
+Kathara.get_instance().connect_tty(machine_name='{container[0]}', lab_hash='{container[1]}')
 """,
             ],
         )
@@ -28,6 +42,7 @@ Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{c
         self.terminals[container] = terminal
         return terminal
 
-    def remove_terminal(self, container: Container):
+    def remove_terminal(self, container: tuple[str,str]):
         if container in self.terminals:
-            self.terminals.pop(container)
+            t = self.terminals.pop(container)
+            print("popped", t)

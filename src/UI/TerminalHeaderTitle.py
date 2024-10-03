@@ -14,7 +14,7 @@ class TerminalHeaderTitle(Gtk.Box):
         self.append(self.content)
 
     def on_terminal_connect(self, container):
-        self.content.set_title(container.name)
+        self.content.set_title(container[0])
 
     def set_terminal(self, *args):
         self.content.set_title("")

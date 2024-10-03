@@ -25,11 +25,8 @@ class MyApp(Adw.Application):
         GUIManager.get_instance().reload()
 
     def create_action(self, name, callback, shortcuts):
-        action = Gio.SimpleAction.new(name=name, parameter_type=None)
-        action.connect('activate', callback)
-        self.add_action(action=action)
         self.set_accels_for_action(
-            detailed_action_name=f'app.{name}',
+            detailed_action_name=f'win.{name}',
             accels=shortcuts,
         )
 

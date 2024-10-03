@@ -3,7 +3,6 @@ from typing import Callable
 from Kathara.manager.Kathara import Kathara
 from gi.repository import Gio, Gtk
 
-from Data.Container import Container
 from UI.Terminal import Terminal
 
 
@@ -73,22 +72,24 @@ class GUIManager:
 
     def reload(self):
         containers = Kathara.get_instance().get_machines_api_objects()
+        for c in containers:
+            print(c.labels)
         containers = [
-            Container(c.labels["name"], c.labels["lab_hash"], c.status)
+            (c.labels["name"], c.labels["lab_hash"])
             for c in containers
         ]
         self.notify_subscribers("reload", containers)
 
-    def connect_container(self, container: Container):
+    def connect_container(self, container: tuple[str,str]):
         self.notify_subscribers("connect_container", container)
 
-    def detach_container(self, container: Container):
+    def detach_container(self, container: tuple[str,str]):
         self.notify_subscribers("detach_container", container)
 
-    def attach_container(self, container: Container, term: Terminal):
+    def attach_container(self, container: tuple[str,str], term: Terminal):
         self.notify_subscribers("attach_container", container, term)
 
-    def terminal_exited(self, terminal: Terminal, container: Container):
+    def terminal_exited(self, terminal: Terminal, container: tuple[str,str]):
         self.notify_subscribers("terminal_exited", container, terminal)
 
     def wipe_terminal(self):
