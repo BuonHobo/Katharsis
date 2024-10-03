@@ -9,7 +9,6 @@ class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, titlebar=Gtk.Box(), title="Katharsis")
         self.set_child(self.get_overlay())
-        GUIManager.get_instance().reload()
 
     @staticmethod
     def get_overlay():

@@ -8,8 +8,7 @@ gi.require_version("Adw", "1")
 gi.require_version("Vte", "3.91")
 from gi.repository import Adw
 from UI.MainWindow import MainWindow
-from UI.Terminal import Terminal
-
+from Logic.GUIManager import GUIManager
 
 class MyApp(Adw.Application):
     def __init__(self, **kwargs):
@@ -22,6 +21,7 @@ class MyApp(Adw.Application):
 
     def on_activate(self, app):
         MainWindow(application=app).present()
+        GUIManager.get_instance().reload()
 
     def create_action(self, name, callback, shortcuts):
         action = Gio.SimpleAction.new(name=name, parameter_type=None)
@@ -31,6 +31,7 @@ class MyApp(Adw.Application):
             detailed_action_name=f'app.{name}',
             accels=shortcuts,
         )
+
 
 
 app = MyApp(
