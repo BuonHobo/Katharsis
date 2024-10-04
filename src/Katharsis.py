@@ -10,7 +10,7 @@ from gi.repository import Gio
 from UI.Application import Application
 
 app = Application(
-    application_id="io.github.buonhobo.UI",
+    application_id="io.github.buonhobo.Katharsis",
     flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
 )
 app.run(sys.argv)
