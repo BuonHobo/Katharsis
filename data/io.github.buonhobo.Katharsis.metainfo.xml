@@ -1,68 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2024 Alex Bonini -->
 <component type="desktop">
-  <id>io.github.buonhobo.Katharsis</id>
-  <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0-or-later</project_license>
+    <id>io.github.buonhobo.Katharsis</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0-or-later</project_license>
 
-  <name>Katharsis</name>
-  <summary>A simple Kathara GUI to make experimentation easier</summary>
+    <name>Katharsis</name>
+    <summary>A simple Kathara GUI to test emulated computer networks</summary>
 
-  <developer_name>Alex Bonini</developer_name>
-  <developer id="io.github.buonhobo">
-    <name>Alex Bonini</name>
-  </developer>
+    <developer_name>Alex Bonini</developer_name>
+    <developer id="io.github.buonhobo">
+        <name>Alex Bonini</name>
+    </developer>
 
-  <recommends>
-    <control>pointing</control>
-    <control>keyboard</control>
-    <display_length compare="ge">360</display_length>
-  </recommends>
+    <recommends>
+        <control>pointing</control>
+        <control>keyboard</control>
+        <display_length compare="ge">360</display_length>
+    </recommends>
 
-  <description>
+    <description>
 
-    <p> Katharsis is a simple GUI for the Kathara network emulation tool.                           </p>
-    <p> It allows you to start and stop labs and connect to the containers in a convenient way.      </p>
-    <p> Katharsis requires Docker to be installed and correctly configured on your system.          </p>
+        <p>Katharsis is a simple GUI for the Kathara network emulation tool.</p>
+        <p>It allows you to start and stop labs and connect to the containers in a convenient way.</p>
+        <p>It allows you to conveniently open multiple container terminals next to each other.</p>
+        <p>Katharsis requires Docker to be installed in rootful mode, and you have to be in the docker group.</p>
 
-    <p> This app is written in Python and uses GTK 4, libadwaita, and VTE.                           </p>
-  </description>
+        <p>This app is written in Python and uses GTK 4, libadwaita, and VTE.</p>
+    </description>
 
-  <screenshots>
-    <screenshot type="default">
-      <caption>Katharsis when connected to a machine</caption>
-      <image>https://i.imgur.com/ZegwoJY.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>Katharsis when starting a lab</caption>
-      <image>https://i.imgur.com/iCvHXax.png</image>
-    </screenshot>
-  </screenshots>
+    <screenshots>
+        <screenshot type="default">
+            <caption>Katharsis launch screen</caption>
+            <image>https://i.imgur.com/GVVOIRj.png</image>
+        </screenshot>
+        <screenshot>
+            <caption>Katharsis when starting a lab</caption>
+            <image>https://i.imgur.com/4uEHyHW.png</image>
+        </screenshot>
+        <screenshot>
+            <caption>Katharsis when connecting to a device</caption>
+            <image>https://i.imgur.com/9eX8goW.png</image>
+        </screenshot>
+        <screenshot>
+            <caption>Katharsis opening multiple windows side by side</caption>
+            <image>https://i.imgur.com/l9QLIEV.png</image>
+        </screenshot>
+    </screenshots>
 
-  <launchable type="desktop-id">io.github.buonhobo.Katharsis.desktop</launchable>
+    <launchable type="desktop-id">io.github.buonhobo.Katharsis.desktop</launchable>
 
-  <categories>
-    <category>Utility</category>
-  </categories>
+    <categories>
+        <category>Utility</category>
+    </categories>
 
-  <content_rating type="oars-1.1" />
+    <content_rating type="oars-1.1"/>
 
-  <kudos>
-    <kudo>ModernToolkit</kudo>
-    <kudo>HiDpiIcon</kudo>
-    <kudo>Notifications</kudo>
-  </kudos>
+    <kudos>
+        <kudo>ModernToolkit</kudo>
+        <kudo>HiDpiIcon</kudo>
+        <kudo>Notifications</kudo>
+    </kudos>
 
-  <releases>
-    <release date="2023-07-17" version="0.14.0">
-      <description>
-        <p>Initial release</p>
-      </description>
-    </release>
-  </releases>
+    <releases>
+        <release date="2023-07-17" version="0.14.0">
+            <description>
+                <p>Initial release</p>
+            </description>
+        </release>
+    </releases>
 
-  <url type="homepage">https://github.com/BuonHobo/Katharsis</url>
-  <url type="bugtracker">https://github.com/BuonHobo/Katharsis/issues</url>
-  <url type="vcs-browser">https://github.com/BuonHobo/Katharsis</url>
-  <update_contact>bnnalx@gmail.com</update_contact>
+    <url type="homepage">https://github.com/BuonHobo/Katharsis</url>
+    <url type="bugtracker">https://github.com/BuonHobo/Katharsis/issues</url>
+    <url type="vcs-browser">https://github.com/BuonHobo/Katharsis</url>
+    <update_contact>bnnalx@gmail.com</update_contact>
 </component>
