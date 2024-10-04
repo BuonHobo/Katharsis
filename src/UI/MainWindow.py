@@ -12,7 +12,7 @@ from UI.Terminal import Terminal
 class MainWindow(ApplicationWindow):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, title="UI")
+        super().__init__(*args, **kwargs, title="Katharsis")
         self.set_content(Adw.OverlaySplitView(sidebar=self.get_sidebar(), content=self.get_panel()))
 
         self.cp = self.lookup_action('copy').connect('activate', self.on_copy)
