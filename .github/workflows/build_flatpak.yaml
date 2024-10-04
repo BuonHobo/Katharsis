@@ -30,7 +30,7 @@ jobs:
           platforms: arm64
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: UI.flatpak
+          bundle: Katharsis-devel.flatpak
           manifest-path: flatpak/io.github.buonhobo.Katharsis.json
           cache-key: flatpak-builder-${{ github.sha }}
           arch: ${{ matrix.arch }}
