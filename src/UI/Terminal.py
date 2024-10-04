@@ -6,7 +6,6 @@ class Terminal(Vte.Terminal):
         super().__init__(*args, **kwargs,
                          allow_hyperlink=True,
                          bold_is_bright=True,
-                         margin_top=10,
                          margin_bottom=10,
                          margin_end=10,
                          margin_start=10)
