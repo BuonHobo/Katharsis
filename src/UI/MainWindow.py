@@ -1,43 +1,102 @@
-from gi.repository import Adw, Gtk, Gio, GLib
+from gi.repository import Adw, Gtk
 
-from Logic.GUIManager import GUIManager
+from Messaging.Broker import Broker
+from Messaging.Events import LabStartBegin, WipeBegin, ReloadBegin, ContainerConnect, SetTerminal, ContainerDetach, \
+    WipeFinish, LabStartFinish, ContainerDeleted
+from UI.ApplicationWindow import ApplicationWindow
+from UI.ContainerList import ContainerList
+from UI.InitialTerminal import InitialTerminal
 from UI.Terminal import Terminal
-from UI.ContentPanel import ContentPanel
-from UI.Sidebar import Sidebar
 
 
-from UI.DetachedPanel import DetachedPanel
+class MainWindow(ApplicationWindow):
 
-from Logic.TerminalManager import TerminalManager
-
-
-class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, titlebar=Gtk.Box(), title="Katharsis")
-        self.set_child(self.get_overlay())
+        super().__init__(*args, **kwargs, title="UI")
+        self.set_content(Adw.OverlaySplitView(sidebar=self.get_sidebar(), content=self.get_panel()))
 
-        self.create_action('copy', Terminal.on_copy, ['<Ctrl><Shift>c'])
-        self.create_action('paste', Terminal.on_paste, ['<Ctrl><Shift>v'])
-        detach = Gio.SimpleAction.new(name="detach", parameter_type=GLib.VariantType.new_array(GLib.VariantType.new("s")))
-        detach.connect("activate", self.on_detach)
-        self.add_action(detach)
+        self.cp = self.lookup_action('copy').connect('activate', self.on_copy)
+        self.pst = self.lookup_action('paste').connect('activate', self.on_paste)
 
-    @staticmethod
-    def get_overlay():
-        overlay = Adw.OverlaySplitView()
-        overlay.set_sidebar(Sidebar())
-        overlay.set_content(ContentPanel())
-        return overlay
+        self.terminal = None
+        self.switch_terminal(InitialTerminal())
 
-    def on_detach(self, action, parameter):
-        print("Detaching", parameter)
-        container = (parameter.get_strv()[0], parameter.get_strv()[1])
-        term = TerminalManager.get_instance().get_terminal(container)
-        p=DetachedPanel(container=container, term=term)
-        p.set_application(self.get_application())
-        p.present()
+        self.cp = 1
+        self.pst = 1
 
-    def create_action(self, name, callback, shortcuts):
-        action = Gio.SimpleAction.new(name=name, parameter_type=None)
-        action.connect('activate', callback)
-        self.add_action(action=action)
+        Broker.subscribe(SetTerminal, self.set_terminal)
+
+    def on_copy(self, a, b):
+        self.terminal.on_copy()
+
+    def on_paste(self, a, b):
+        self.terminal.on_paste()
+
+    def get_sidebar(self):
+        sb = Adw.ToolbarView()
+        sb.add_top_bar(Adw.HeaderBar(show_title=True))
+        sb.add_bottom_bar(self.get_main_buttons())
+        sb.set_content(ContainerList())
+        return sb
+
+    def get_main_buttons(self):
+        mb = Gtk.Box(margin_end=10,
+                     margin_start=10,
+                     margin_top=10,
+                     margin_bottom=10,
+                     spacing=10)
+        start = Gtk.Button(
+            icon_name="media-playback-start-symbolic",
+            tooltip_text="Start or restart a lab",
+            hexpand=True
+        )
+        start.connect("clicked", lambda _: Broker.notify(LabStartBegin()))
+        mb.append(start)
+
+        wipe = Gtk.Button(
+            icon_name="user-trash-symbolic",
+            tooltip_text="Wipe all labs",
+            hexpand=True
+        )
+        wipe.connect("clicked", lambda _: Broker.notify(WipeBegin()))
+        mb.append(wipe)
+
+        reload = Gtk.Button(
+            icon_name="view-refresh-symbolic",
+            tooltip_text="Reload running containers",
+            hexpand=True
+        )
+        reload.connect("clicked", lambda _: Broker.notify(ReloadBegin()))
+        mb.append(reload)
+
+        return mb
+
+    def get_topbar(self):
+        wt = Adw.WindowTitle(title="")
+
+        Broker.subscribe(ContainerConnect, lambda e: wt.set_title(e.container.name))
+        Broker.subscribe(WipeBegin, lambda _: wt.set_title("Wiping lab..."))
+        Broker.subscribe(LabStartBegin, lambda _: wt.set_title("Starting lab..."))
+        Broker.subscribe(ContainerDetach,
+                         lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
+        Broker.subscribe(ContainerDeleted,
+                         lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
+        Broker.subscribe(WipeFinish, lambda _: wt.set_title(""))
+        Broker.subscribe(LabStartFinish, lambda _: wt.set_title(""))
+
+        return Adw.HeaderBar(show_title=True, title_widget=wt)
+
+    def get_panel(self):
+        ct = Adw.ToolbarView()
+        ct.add_top_bar(self.get_topbar())
+        return ct
+
+    def set_terminal(self, event: SetTerminal):
+        self.switch_terminal(event.terminal)
+
+    def switch_terminal(self, terminal: Terminal):
+        if terminal == self.terminal:
+            return
+        self.terminal = terminal
+        self.get_content().get_content().set_content(self.terminal)
+        self.terminal.grab_focus()

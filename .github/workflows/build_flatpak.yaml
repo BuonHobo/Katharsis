@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
 name: CI
 jobs:
@@ -12,7 +12,7 @@ jobs:
       options: --privileged
     strategy:
       matrix:
-        arch: [x86_64, aarch64]
+        arch: [ x86_64, aarch64 ]
       # Don't fail the whole workflow if one architecture fails
       fail-fast: false
     steps:
@@ -30,7 +30,7 @@ jobs:
           platforms: arm64
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: Katharsis.flatpak
-          manifest-path: flatpak/io.github.buonhobo.Katharsis.json
+          bundle: UI.flatpak
+          manifest-path: flatpak/io.github.buonhobo.UI.json
           cache-key: flatpak-builder-${{ github.sha }}
           arch: ${{ matrix.arch }}

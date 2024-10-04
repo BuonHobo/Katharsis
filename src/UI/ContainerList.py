@@ -1,66 +1,79 @@
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw
 
-from Logic.GUIManager import GUIManager
+from Data.Container import Container
+from Messaging.Broker import Broker
+from Messaging.Events import ContainerConnect, ContainerDetach, ContainerAdded, ContainerDeleted, ContainersUpdate
 
 
 class ContainerList(Gtk.ScrolledWindow):
-    def __init__(self):
-        super().__init__(vexpand=True)
-        self.containers: dict[tuple[str,str], Adw.ActionRow] = {}
-        self.status_page = Adw.StatusPage(icon_name="dialog-question", title="No Running Labs",
-                                          description="Start a Lab or reload to see your devices")
-        self.containers_rows = Adw.PreferencesGroup(margin_end=10, margin_start=10)
-        self.set_child(self.status_page)
-
-        GUIManager.get_instance().subscribe("reload", self.update_containers)
-        GUIManager.get_instance().subscribe("detach_container", self.on_container_detached)
-        GUIManager.get_instance().subscribe("attach_container", self.on_attach_container)
-
-    def get_row2(self, container: tuple[str,str]):
-        row = Adw.ActionRow(
-            title=container[0],
-            activatable=True,tooltip_text=f"Connect to {container[0]}")
-        row.add_prefix(Gtk.Image(icon_name="utilities-terminal-symbolic", pixel_size=20))
-        cut = Gtk.Button(icon_name="edit-cut-symbolic", has_frame=False, margin_top=5, margin_bottom=5,tooltip_text=f"Connect to {container[0]} in a different window")
-        cut.set_action_name("win.detach")
-        cut.set_action_target_value(GLib.Variant.new_array(GLib.VariantType.new("s"),
-            [
-                GLib.Variant.new_string(container[0]),
-                GLib.Variant.new_string(container[1]),
-            ]
-        ))
-        row.add_suffix(cut)
-        row.connect(
-            "activated",
-            lambda btn: GUIManager.get_instance().connect_container(container),
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs,
+                         margin_top=10,
+                         margin_bottom=10,
+                         margin_start=10,
+                         margin_end=10,
+                         vexpand=True
+                         )
+        self.status_page = Adw.StatusPage(
+            icon_name="dialog-information-symbolic",
+            title="No running devices",
+            description="Start a lab or reload to see your devices",
         )
-        cut.connect("clicked", lambda btn: GUIManager.get_instance().detach_container(container))
+        self.rows = Adw.PreferencesGroup()
+        self.set_child(self.status_page)
+        self.container_rows: dict[Container, Adw.ActionRow] = {}
+        self.containers: set[Container] = set()
+
+        Broker.subscribe(ContainerAdded, self.on_container_added)
+        Broker.subscribe(ContainerDeleted, self.on_container_deleted)
+        Broker.subscribe(ContainersUpdate, self.on_containers_update)
+
+    def build_row(self, container: Container):
+        row = Adw.ActionRow(
+            title=container.name,
+            activatable=True,
+            tooltip_text=f"Connect to {container.name}",
+        )
+
+        row.add_prefix(Gtk.Image(icon_name="utilities-terminal-symbolic", pixel_size=20))
+        row.connect("activated", self.on_row_activated, container)
+
+        detach = Gtk.Button(
+            icon_name="edit-cut-symbolic",
+            has_frame=False,
+            margin_top=5,
+            margin_bottom=5,
+            tooltip_text=f"Connect to {container.name} in a different window",
+        )
+        detach.connect("clicked", self.on_detach, container)
+        row.add_suffix(detach)
+        self.container_rows[container] = row
         return row
 
-    def add_container(self, container: tuple[str,str]):
-        if len(self.containers) == 0:
-            self.set_child(self.containers_rows)
+    def on_row_activated(self, row: Adw.ActionRow, container: Container):
+        Broker.notify(ContainerConnect(container))
 
-        row = self.get_row2(container)
-        self.containers[(container[0],container[1])] = row
-        self.containers_rows.add(row)
+    def on_detach(self, btn: Gtk.Button, container: Container):
+        Broker.notify(ContainerDetach(container))
 
-    def remove_container(self, container: tuple[str,str]):
-        row = self.containers.pop((container[0],container[1]))
-        self.containers_rows.remove(row)
+    def on_container_added(self, event: ContainerAdded):
+        row = self.build_row(event.container)
+        self.rows.add(row)
+
+    def on_containers_update(self, event: ContainersUpdate):
+        new_containers = set(event.containers)
+        added = new_containers - self.containers
+        removed = self.containers - new_containers
+        self.containers = new_containers
+        for container in added:
+            Broker.notify(ContainerAdded(container))
+        for container in removed:
+            Broker.notify(ContainerDeleted(container))
         if len(self.containers) == 0:
             self.set_child(self.status_page)
+        else:
+            self.set_child(self.rows)
 
-    def update_containers(self, containers: list[tuple[str,str]]):
-        new_containers_set = set(containers)
-        old_containers_set = self.containers.keys()
-        for container in new_containers_set - old_containers_set:
-            self.add_container(container)
-        for container in old_containers_set - new_containers_set:
-            self.remove_container(container)
-
-    def on_container_detached(self, container: tuple[str,str]):
-        self.containers[container].set_sensitive(False)
-
-    def on_attach_container(self, container: tuple[str,str], term):
-        self.containers[container].set_sensitive(True)
+    def on_container_deleted(self, event: ContainerDeleted):
+        row = self.container_rows.pop(event.container)
+        self.rows.remove(row)
