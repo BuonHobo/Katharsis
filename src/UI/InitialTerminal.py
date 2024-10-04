@@ -2,8 +2,9 @@ from UI.Terminal import Terminal
 
 
 class InitialTerminal(Terminal):
-    welcome_message = """Welcome to UI!
+    welcome_message = """Welcome to Katharsis!
 This is a GUI for the Kathara network simulator.
+
 In order to use this application, you must:
     - Install Docker in rootful mode
     - Add your user to the docker group
