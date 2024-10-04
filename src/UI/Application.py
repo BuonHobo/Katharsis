@@ -13,6 +13,7 @@ from UI.TerminalWindow import TerminalWindow
 class Application(Adw.Application):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        Adw.StyleManager.get_default().set_color_scheme(Adw.ColorScheme.FORCE_DARK)
         self.connect("activate", self.on_activate)
 
         self.set_accels_for_action('win.copy', ['<Ctrl><Shift>c'])

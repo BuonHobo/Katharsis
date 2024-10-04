@@ -9,7 +9,6 @@ from Messaging.Events import ContainerConnect, ContainerDetach, ContainerAdded, 
 class ContainerList(Gtk.ScrolledWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs,
-                         margin_top=10,
                          margin_bottom=10,
                          margin_start=10,
                          margin_end=10,
@@ -46,11 +45,11 @@ class ContainerList(Gtk.ScrolledWindow):
             tooltip_text=f"Connect to {container.name}",
         )
 
-        row.add_prefix(Gtk.Image(icon_name="utilities-terminal-symbolic", pixel_size=20))
+        row.add_prefix(Gtk.Image(icon_name="network-server-symbolic", pixel_size=20))
         row.connect("activated", self.on_row_activated, container)
 
         detach = Gtk.Button(
-            icon_name="edit-cut-symbolic",
+            icon_name="window-new-symbolic",
             has_frame=False,
             margin_top=5,
             margin_bottom=5,

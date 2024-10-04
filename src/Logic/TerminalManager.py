@@ -3,6 +3,8 @@ from UI.Terminal import Terminal
 
 from Messaging.Broker import Broker
 
+from Messaging.Events import ContainerDisconnected
+
 
 class TerminalManager:
     connect_script = """

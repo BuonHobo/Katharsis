@@ -45,7 +45,6 @@ class MainWindow(ApplicationWindow):
     def get_main_buttons(self):
         mb = Gtk.Box(margin_end=10,
                      margin_start=10,
-                     margin_top=10,
                      margin_bottom=10,
                      spacing=10)
         start = Gtk.Button(
