@@ -1,6 +1,8 @@
 from Data.Container import Container
 from UI.Terminal import Terminal
 
+from Messaging.Broker import Broker
+
 
 class TerminalManager:
     connect_script = """
@@ -34,6 +36,7 @@ Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{c
         return terminal
 
     def on_terminal_exited(self, term: Terminal, status: int, container: Container):
+        Broker.notify(ContainerDisconnected(container))
         term = self.container_terminals.pop(container)
         if p := term.get_parent():
             p.set_content(None)

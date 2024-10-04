@@ -82,3 +82,10 @@ class SetTerminal(TerminalEvent):
 
 
 class LabStartBegin(LabEvent): pass
+
+class ContainerDisconnected(ContainerEvent):
+    def __init__(self, container: Data.Container.Container):
+        self.container = container
+
+class Shutdown(Event):
+    pass

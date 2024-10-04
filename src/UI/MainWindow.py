@@ -8,6 +8,10 @@ from UI.ContainerList import ContainerList
 from UI.InitialTerminal import InitialTerminal
 from UI.Terminal import Terminal
 
+from Messaging.Events import ContainerDisconnected
+
+from Messaging.Events import Shutdown
+
 
 class MainWindow(ApplicationWindow):
 
@@ -15,14 +19,13 @@ class MainWindow(ApplicationWindow):
         super().__init__(*args, **kwargs, title="Katharsis")
         self.set_content(Adw.OverlaySplitView(sidebar=self.get_sidebar(), content=self.get_panel()))
 
-        self.cp = self.lookup_action('copy').connect('activate', self.on_copy)
-        self.pst = self.lookup_action('paste').connect('activate', self.on_paste)
+        self.lookup_action('copy').connect('activate', self.on_copy)
+        self.lookup_action('paste').connect('activate', self.on_paste)
+
+        self.connect("close-request", lambda _: Broker.notify(Shutdown()))
 
         self.terminal = None
         self.switch_terminal(InitialTerminal())
-
-        self.cp = 1
-        self.pst = 1
 
         Broker.subscribe(SetTerminal, self.set_terminal)
 
@@ -83,6 +86,8 @@ class MainWindow(ApplicationWindow):
                          lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
         Broker.subscribe(WipeFinish, lambda _: wt.set_title(""))
         Broker.subscribe(LabStartFinish, lambda _: wt.set_title(""))
+        Broker.subscribe(ContainerDisconnected,
+                         lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
 
         return Adw.HeaderBar(show_title=True, title_widget=wt)
 
