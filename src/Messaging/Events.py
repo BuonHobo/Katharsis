@@ -10,7 +10,7 @@ class MainButtonEvent(Event): pass
 class LabEvent(MainButtonEvent): pass
 
 
-class LabStartBegin(LabEvent): pass
+class LabSelect(LabEvent): pass
 
 
 class LabStartFinish(LabEvent): pass
@@ -79,3 +79,6 @@ class TerminalPasteEvent(TerminalEvent): pass
 class SetTerminal(TerminalEvent):
     def __init__(self, terminal):
         self.terminal = terminal
+
+
+class LabStartBegin(LabEvent): pass

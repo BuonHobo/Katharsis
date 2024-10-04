@@ -1,7 +1,7 @@
 from gi.repository import Adw, Gtk
 
 from Messaging.Broker import Broker
-from Messaging.Events import LabStartBegin, WipeBegin, ReloadBegin, ContainerConnect, SetTerminal, ContainerDetach, \
+from Messaging.Events import LabSelect, WipeBegin, ReloadBegin, ContainerConnect, SetTerminal, ContainerDetach, \
     WipeFinish, LabStartFinish, ContainerDeleted
 from UI.ApplicationWindow import ApplicationWindow
 from UI.ContainerList import ContainerList
@@ -50,7 +50,7 @@ class MainWindow(ApplicationWindow):
             tooltip_text="Start or restart a lab",
             hexpand=True
         )
-        start.connect("clicked", lambda _: Broker.notify(LabStartBegin()))
+        start.connect("clicked", lambda _: Broker.notify(LabSelect()))
         mb.append(start)
 
         wipe = Gtk.Button(
@@ -76,7 +76,7 @@ class MainWindow(ApplicationWindow):
 
         Broker.subscribe(ContainerConnect, lambda e: wt.set_title(e.container.name))
         Broker.subscribe(WipeBegin, lambda _: wt.set_title("Wiping lab..."))
-        Broker.subscribe(LabStartBegin, lambda _: wt.set_title("Starting lab..."))
+        Broker.subscribe(LabSelect, lambda _: wt.set_title("(Re)starting lab..."))
         Broker.subscribe(ContainerDetach,
                          lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
         Broker.subscribe(ContainerDeleted,

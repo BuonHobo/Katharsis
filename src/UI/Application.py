@@ -5,7 +5,7 @@ from Data.Container import Container
 from Logic.TerminalManager import TerminalManager
 from Messaging.Broker import Broker
 from Messaging.Events import ReloadBegin, ContainersUpdate, ContainerDeleted, ContainerDetach, \
-    ContainerConnect, SetTerminal, LabStartBegin, WipeBegin, WipeFinish, LabStartFinish
+    ContainerConnect, SetTerminal, LabSelect, WipeBegin, WipeFinish, LabStartFinish, LabStartBegin
 from UI.MainWindow import MainWindow
 from UI.TerminalWindow import TerminalWindow
 
@@ -27,7 +27,7 @@ class Application(Adw.Application):
         Broker.subscribe(ContainerDetach, self.on_container_detach)
         Broker.subscribe(ContainerConnect, self.on_container_connect)
 
-        Broker.subscribe(LabStartBegin, self.select_lab)
+        Broker.subscribe(LabSelect, self.select_lab)
         Broker.subscribe(WipeBegin, self.on_wipe)
 
     def select_lab(self, _):
@@ -36,10 +36,11 @@ class Application(Adw.Application):
 
     def on_lab_start(self, dialog: Gtk.FileDialog, response_id: Gio.AsyncResult):
         lab = dialog.select_folder_finish(response_id).get_path()
+        Broker.notify(LabStartBegin())
         self.dialog.set_initial_folder(Gio.File.new_for_path(lab))
 
         term = self.terminal_manager.empty()
-        term.connect("child_exited", lambda t, s: Broker.notify(ReloadBegin() or Broker.notify(LabStartFinish())))
+        term.connect("child_exited", lambda t, s: Broker.notify(ReloadBegin()) or Broker.notify(LabStartFinish()))
         term.run(["python", "-m", "kathara", "lrestart", "--noterminals", "-d", lab])
         Broker.notify(SetTerminal(term))
 

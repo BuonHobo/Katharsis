@@ -2,7 +2,8 @@ from gi.repository import Gtk, Adw
 
 from Data.Container import Container
 from Messaging.Broker import Broker
-from Messaging.Events import ContainerConnect, ContainerDetach, ContainerAdded, ContainerDeleted, ContainersUpdate
+from Messaging.Events import ContainerConnect, ContainerDetach, ContainerAdded, ContainerDeleted, ContainersUpdate, \
+    LabStartFinish, LabStartBegin
 
 
 class ContainerList(Gtk.ScrolledWindow):
@@ -27,6 +28,16 @@ class ContainerList(Gtk.ScrolledWindow):
         Broker.subscribe(ContainerAdded, self.on_container_added)
         Broker.subscribe(ContainerDeleted, self.on_container_deleted)
         Broker.subscribe(ContainersUpdate, self.on_containers_update)
+        Broker.subscribe(LabStartBegin, self.disable_entries)
+        Broker.subscribe(LabStartFinish, self.enable_entries)
+
+    def disable_entries(self, _):
+        for row in self.container_rows.values():
+            row.set_sensitive(False)
+
+    def enable_entries(self, _):
+        for row in self.container_rows.values():
+            row.set_sensitive(True)
 
     def build_row(self, container: Container):
         row = Adw.ActionRow(
