@@ -13,11 +13,6 @@ class Broker:
         cls.__subscribers[event].append(function)
 
     @classmethod
-    def unsubscribe(cls, event: type[Event], function: Callable[[Event], Any]):
-        if event in cls.__subscribers:
-            cls.__subscribers[event].remove(function)
-
-    @classmethod
     def notify(cls, event: Event):
         for evt in type(event).mro():
             if evt in cls.__subscribers and issubclass(evt, Event):

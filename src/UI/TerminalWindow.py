@@ -1,12 +1,10 @@
-from gi.repository import Adw,Gio
+from gi.repository import Adw
 
 from Data.Container import Container
 from Messaging.Broker import Broker
 from Messaging.Events import ContainerAdded
 from UI.ApplicationWindow import ApplicationWindow
 from UI.Terminal import Terminal
-
-from Messaging.Events import Shutdown
 
 
 class TerminalWindow(ApplicationWindow):
@@ -21,19 +19,20 @@ class TerminalWindow(ApplicationWindow):
         self.terminal.connect("child_exited",
                               lambda t, s: self.close())
         self.connect("close-request",
-                     lambda _: self.on_close())
+                     lambda _: self.on_close_req())
 
-        Broker.subscribe(Shutdown, self.on_close)
-
-    def on_copy(self,a,b):
+    def on_copy(self, a, b):
         self.terminal.on_copy()
 
-    def on_paste(self,a,b):
+    def on_paste(self, a, b):
         self.terminal.on_paste()
 
-    def on_close(self, *args):
+    def on_close_req(self):
         self.terminal.unparent()
         Broker.notify(ContainerAdded(self.container))
+
+    def on_close(self, *args):
+        self.on_close_req()
         self.close()
 
     def get_content(self):

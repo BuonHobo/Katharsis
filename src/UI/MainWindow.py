@@ -1,16 +1,14 @@
 from gi.repository import Adw, Gtk
 
 from Messaging.Broker import Broker
+from Messaging.Events import ContainerDisconnected, LabStartBegin, ContainerAdded
 from Messaging.Events import LabSelect, WipeBegin, ReloadBegin, ContainerConnect, SetTerminal, ContainerDetach, \
-    WipeFinish, LabStartFinish, ContainerDeleted
+    WipeFinish, LabStartFinish, ContainerDeleted, OpenTerminal
+from Messaging.Events import Shutdown
 from UI.ApplicationWindow import ApplicationWindow
 from UI.ContainerList import ContainerList
 from UI.InitialTerminal import InitialTerminal
 from UI.Terminal import Terminal
-
-from Messaging.Events import ContainerDisconnected
-
-from Messaging.Events import Shutdown
 
 
 class MainWindow(ApplicationWindow):
@@ -28,6 +26,12 @@ class MainWindow(ApplicationWindow):
         self.switch_terminal(InitialTerminal())
 
         Broker.subscribe(SetTerminal, self.set_terminal)
+        Broker.subscribe(ContainerAdded, self.on_added)
+
+    def on_added(self, e: ContainerAdded):
+        c = self.get_content().get_content().get_content()
+        if (c is None) or (c is not self.terminal):
+            Broker.notify(ContainerConnect(e.container))
 
     def on_copy(self, a, b):
         self.terminal.on_copy()
@@ -37,7 +41,12 @@ class MainWindow(ApplicationWindow):
 
     def get_sidebar(self):
         sb = Adw.ToolbarView()
-        sb.add_top_bar(Adw.HeaderBar(show_title=True))
+        tb = Adw.HeaderBar(show_title=True)
+        bt = Gtk.Button(icon_name="utilities-terminal-symbolic",
+                        tooltip_text="Open a bash terminal with access to kathara")
+        bt.connect("clicked", lambda _: Broker.notify(OpenTerminal()))
+        tb.pack_start(bt)
+        sb.add_top_bar(tb)
         sb.add_bottom_bar(self.get_main_buttons())
         sb.set_content(ContainerList())
         return sb
@@ -78,7 +87,7 @@ class MainWindow(ApplicationWindow):
 
         Broker.subscribe(ContainerConnect, lambda e: wt.set_title(e.container.name))
         Broker.subscribe(WipeBegin, lambda _: wt.set_title("Wiping lab..."))
-        Broker.subscribe(LabSelect, lambda _: wt.set_title("(Re)starting lab..."))
+        Broker.subscribe(LabStartBegin, lambda _: wt.set_title("(Re)starting lab..."))
         Broker.subscribe(ContainerDetach,
                          lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
         Broker.subscribe(ContainerDeleted,
@@ -87,6 +96,7 @@ class MainWindow(ApplicationWindow):
         Broker.subscribe(LabStartFinish, lambda _: wt.set_title(""))
         Broker.subscribe(ContainerDisconnected,
                          lambda e: wt.set_title("" if wt.get_title() == e.container.name else wt.get_title()))
+        Broker.subscribe(OpenTerminal, lambda _: wt.set_title("Integrated shell, good luck"))
 
         return Adw.HeaderBar(show_title=True, title_widget=wt)
 
@@ -99,7 +109,7 @@ class MainWindow(ApplicationWindow):
         self.switch_terminal(event.terminal)
 
     def switch_terminal(self, terminal: Terminal):
-        if terminal == self.terminal:
+        if self.get_content().get_content() is terminal.get_parent():
             return
         self.terminal = terminal
         self.get_content().get_content().set_content(self.terminal)

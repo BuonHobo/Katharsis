@@ -4,8 +4,9 @@ from gi.repository import Adw, Gtk, Gio
 from Data.Container import Container
 from Logic.TerminalManager import TerminalManager
 from Messaging.Broker import Broker
-from Messaging.Events import ReloadBegin, ContainersUpdate, ContainerDeleted, ContainerDetach, \
-    ContainerConnect, SetTerminal, LabSelect, WipeBegin, WipeFinish, LabStartFinish, LabStartBegin
+from Messaging.Events import ReloadBegin, ContainersUpdate, ContainerDetach, \
+    ContainerConnect, SetTerminal, LabSelect, WipeBegin, WipeFinish, LabStartFinish, LabStartBegin, OpenTerminal, \
+    ContainerFocused, ContainerAttach
 from UI.MainWindow import MainWindow
 from UI.TerminalWindow import TerminalWindow
 
@@ -30,9 +31,23 @@ class Application(Adw.Application):
 
         Broker.subscribe(LabSelect, self.select_lab)
         Broker.subscribe(WipeBegin, self.on_wipe)
+        Broker.subscribe(OpenTerminal, self.on_open_terminal)
+
+        Broker.subscribe(ContainerFocused, self.on_container_focused)
+        Broker.subscribe(ContainerAttach, self.on_container_attach)
+
+    def on_container_attach(self, event: ContainerAttach):
+        term = self.terminal_manager.get_terminal(event.container)
+        term.get_root().close()
+
+    def on_container_focused(self, e: ContainerFocused):
+        self.terminal_manager.get_terminal(e.container).get_root().present()
+
+    def on_open_terminal(self, _):
+        term = self.terminal_manager.shell()
+        Broker.notify(SetTerminal(term))
 
     def select_lab(self, _):
-        Broker.notify(SetTerminal(self.terminal_manager.empty()))
         self.dialog.select_folder(callback=self.on_lab_start)
 
     def on_lab_start(self, dialog: Gtk.FileDialog, response_id: Gio.AsyncResult):
@@ -68,7 +83,6 @@ class Application(Adw.Application):
             p.set_content(None)
         window = TerminalWindow(term, container=event.container)
         self.add_window(window)
-        Broker.notify(ContainerDeleted(event.container))
         window.present()
 
     def on_container_connect(self, event: ContainerConnect):

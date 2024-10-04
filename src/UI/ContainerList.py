@@ -2,8 +2,9 @@ from gi.repository import Gtk, Adw
 
 from Data.Container import Container
 from Messaging.Broker import Broker
-from Messaging.Events import ContainerConnect, ContainerDetach, ContainerAdded, ContainerDeleted, ContainersUpdate, \
-    LabStartFinish, LabStartBegin
+from Messaging.Events import ContainersUpdate, \
+    LabStartFinish, LabStartBegin, ContainerAdded
+from UI.ContainerRow import ContainerRow
 
 
 class ContainerList(Gtk.ScrolledWindow):
@@ -21,53 +22,32 @@ class ContainerList(Gtk.ScrolledWindow):
         )
         self.rows = Adw.PreferencesGroup()
         self.set_child(self.status_page)
-        self.container_rows: dict[Container, Adw.ActionRow] = {}
+        self.container_rows: dict[Container, ContainerRow] = {}
         self.containers: set[Container] = set()
 
-        Broker.subscribe(ContainerAdded, self.on_container_added)
-        Broker.subscribe(ContainerDeleted, self.on_container_deleted)
         Broker.subscribe(ContainersUpdate, self.on_containers_update)
         Broker.subscribe(LabStartBegin, self.disable_entries)
         Broker.subscribe(LabStartFinish, self.enable_entries)
+        Broker.subscribe(ContainerAdded, self.on_container_attach)
 
     def disable_entries(self, _):
         for row in self.container_rows.values():
             row.set_sensitive(False)
+
+    def on_container_attach(self, event: ContainerAdded):
+        self.container_rows[event.container].on_attach()
 
     def enable_entries(self, _):
         for row in self.container_rows.values():
             row.set_sensitive(True)
 
     def build_row(self, container: Container):
-        row = Adw.ActionRow(
-            title=container.name,
-            activatable=True,
-            tooltip_text=f"Connect to {container.name}",
-        )
-
-        row.add_prefix(Gtk.Image(icon_name="network-server-symbolic", pixel_size=20))
-        row.connect("activated", self.on_row_activated, container)
-
-        detach = Gtk.Button(
-            icon_name="window-new-symbolic",
-            has_frame=False,
-            margin_top=5,
-            margin_bottom=5,
-            tooltip_text=f"Connect to {container.name} in a different window",
-        )
-        detach.connect("clicked", self.on_detach, container)
-        row.add_suffix(detach)
-        self.container_rows[container] = row
+        row = ContainerRow(container)
         return row
 
-    def on_row_activated(self, row: Adw.ActionRow, container: Container):
-        Broker.notify(ContainerConnect(container))
-
-    def on_detach(self, btn: Gtk.Button, container: Container):
-        Broker.notify(ContainerDetach(container))
-
-    def on_container_added(self, event: ContainerAdded):
-        row = self.build_row(event.container)
+    def add_container(self, container: Container):
+        row = self.build_row(container)
+        self.container_rows[container] = row
         self.rows.add(row)
 
     def on_containers_update(self, event: ContainersUpdate):
@@ -76,14 +56,14 @@ class ContainerList(Gtk.ScrolledWindow):
         removed = self.containers - new_containers
         self.containers = new_containers
         for container in added:
-            Broker.notify(ContainerAdded(container))
+            self.add_container(container)
         for container in removed:
-            Broker.notify(ContainerDeleted(container))
+            self.remove_container(container)
         if len(self.containers) == 0:
             self.set_child(self.status_page)
         else:
             self.set_child(self.rows)
 
-    def on_container_deleted(self, event: ContainerDeleted):
-        row = self.container_rows.pop(event.container)
+    def remove_container(self, container: Container):
+        row = self.container_rows.pop(container)
         self.rows.remove(row)

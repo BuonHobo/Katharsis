@@ -1,4 +1,5 @@
 import Data.Container
+from UI.Terminal import Terminal
 
 
 class Event: pass
@@ -67,6 +68,13 @@ class ContainerAttach(ContainerEvent):
         self.container = container
 
 
+class TerminalAttach(ContainerAdded):
+    def __init__(self, container: Data.Container.Container, terminal: Terminal):
+        super().__init__(container)
+        self.container = container
+        self.terminal = terminal
+
+
 class TerminalEvent(Event): pass
 
 
@@ -83,9 +91,19 @@ class SetTerminal(TerminalEvent):
 
 class LabStartBegin(LabEvent): pass
 
+
 class ContainerDisconnected(ContainerEvent):
     def __init__(self, container: Data.Container.Container):
         self.container = container
 
+
 class Shutdown(Event):
     pass
+
+
+class OpenTerminal(Event): pass
+
+
+class ContainerFocused(ContainerEvent):
+    def __init__(self, container: Data.Container.Container):
+        self.container = container

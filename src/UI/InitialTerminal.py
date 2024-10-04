@@ -13,8 +13,12 @@ After making your lab, you will be able to (re)start it from the sidebar.
 Wiping will delete all Kathara labs and containers.
 You can use the refresh button to detect changes that were made outside of this application.
 
-For a reference on Kathara labs, visit:
-https://github.com/KatharaFramework/Kathara-Labs"""
+For a Kathara lab reference, visit:
+https://github.com/KatharaFramework/Kathara-Labs
+
+If you want to use the integrated terminal for a traditional Kathara experience,
+then you must manually give this app permission to access your lab directories.
+Flatseal is a great way to do it."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

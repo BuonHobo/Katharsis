@@ -1,9 +1,7 @@
 from Data.Container import Container
-from UI.Terminal import Terminal
-
 from Messaging.Broker import Broker
-
 from Messaging.Events import ContainerDisconnected
+from UI.Terminal import Terminal
 
 
 class TerminalManager:
@@ -13,6 +11,7 @@ print("Connecting to", '{container.name}' + '...')
 Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{container.lab_hash}')
 """
     __empty = Terminal()
+    __shell = None
 
     def __init__(self):
         self.container_terminals: dict[Container, Terminal] = {}
@@ -20,6 +19,12 @@ Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{c
     def empty(self):
         self.__empty.reset(True, True)
         return self.__empty
+
+    def shell(self):
+        if self.__shell is None:
+            self.__shell = Terminal()
+            self.__shell.run(["bash", "-c", """kathara() { python -m kathara "$@"; } ; export -f kathara ; bash"""])
+        return self.__shell
 
     def get_terminal(self, container: Container):
         if container in self.container_terminals:
@@ -42,3 +47,4 @@ Kathara.get_instance().connect_tty(machine_name='{container.name}', lab_hash='{c
         term = self.container_terminals.pop(container)
         if p := term.get_parent():
             p.set_content(None)
+            term.unparent()
