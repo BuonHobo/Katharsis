@@ -3,7 +3,7 @@ from UI.Terminal import Terminal
 
 class InitialTerminal(Terminal):
     welcome_message = """Welcome to Katharsis!
-This is a GUI for the Kathara network simulator.
+This is a GUI for the Kathara network emulator.
 
 In order to use this application, you must:
     - Install Docker in rootful mode
