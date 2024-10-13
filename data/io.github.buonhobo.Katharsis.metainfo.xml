@@ -6,7 +6,7 @@
     <project_license>GPL-3.0-or-later</project_license>
 
     <name>Katharsis</name>
-    <summary>A simple Kathara GUI to test emulated computer networks</summary>
+    <summary>Emulate computer networks with ease</summary>
 
     <developer_name>Alex Bonini</developer_name>
     <developer id="io.github.buonhobo">
@@ -25,31 +25,24 @@
     </branding>
     
     <description>
-
-        <p>Katharsis is a simple GUI for the Kathara network emulation tool.</p>
+        <p>Katharsis is a simple GUI for the Kathara computer network emulation framework.</p>
         <p>It allows you to start and stop labs and connect to the containers in a convenient way.</p>
         <p>It allows you to conveniently open multiple container terminals next to each other.</p>
         <p>Katharsis requires Docker to be installed in rootful mode, and you have to be in the docker group.</p>
-
-        <p>This app is written in Python and uses GTK 4, libadwaita, and VTE.</p>
     </description>
 
     <screenshots>
         <screenshot type="default">
-            <caption>Katharsis launch screen</caption>
-            <image>https://i.imgur.com/GVVOIRj.png</image>
+            <caption>Katharsis start screen</caption>
+            <image xml:lang="en">https://i.imgur.com/GVVOIRj.png</image>
         </screenshot>
         <screenshot>
             <caption>Katharsis when starting a lab</caption>
-            <image>https://i.imgur.com/4uEHyHW.png</image>
+            <image xml:lang="en">https://i.imgur.com/4uEHyHW.png</image>
         </screenshot>
         <screenshot>
             <caption>Katharsis when connecting to a device</caption>
-            <image>https://i.imgur.com/9eX8goW.png</image>
-        </screenshot>
-        <screenshot>
-            <caption>Katharsis opening multiple windows side by side</caption>
-            <image>https://i.imgur.com/l9QLIEV.png</image>
+            <image xml:lang="en">https://i.imgur.com/9eX8goW.png</image>
         </screenshot>
     </screenshots>
 
@@ -68,7 +61,7 @@
     </kudos>
 
     <releases>
-        <release date="2023-07-17" version="0.14.0">
+        <release date="2024-10-13" version="0.15.0">
             <description>
                 <p>Initial release</p>
             </description>
