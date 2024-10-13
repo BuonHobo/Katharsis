@@ -34,15 +34,15 @@
     <screenshots>
         <screenshot type="default">
             <caption>Katharsis start screen</caption>
-            <image xml:lang="en">https://i.imgur.com/GVVOIRj.png</image>
+            <image>https://i.imgur.com/GVVOIRj.png</image>
         </screenshot>
         <screenshot>
             <caption>Katharsis when starting a lab</caption>
-            <image xml:lang="en">https://i.imgur.com/4uEHyHW.png</image>
+            <image>https://i.imgur.com/4uEHyHW.png</image>
         </screenshot>
         <screenshot>
             <caption>Katharsis when connecting to a device</caption>
-            <image xml:lang="en">https://i.imgur.com/9eX8goW.png</image>
+            <image>https://i.imgur.com/9eX8goW.png</image>
         </screenshot>
     </screenshots>
 
