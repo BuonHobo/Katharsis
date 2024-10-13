@@ -19,6 +19,11 @@
         <display_length compare="ge">360</display_length>
     </recommends>
 
+    <branding>
+        <color type="primary" scheme_preference="light">#708FFE</color>
+        <color type="primary" scheme_preference="dark">#FF7658</color>
+    </branding>
+    
     <description>
 
         <p>Katharsis is a simple GUI for the Kathara network emulation tool.</p>
