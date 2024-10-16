@@ -8,16 +8,22 @@
     <name>Katharsis</name>
     <summary>Emulate computer networks with ease</summary>
 
-    <developer_name>Alex Bonini</developer_name>
     <developer id="io.github.buonhobo">
         <name>Alex Bonini</name>
     </developer>
 
+    <requires>
+      <display_length compare="ge">360</display_length>
+    </requires>
+
     <recommends>
+      <display_length compare="ge">600</display_length>
+    </recommends>
+
+    <supports>
         <control>pointing</control>
         <control>keyboard</control>
-        <display_length compare="ge">360</display_length>
-    </recommends>
+    </supports>
 
     <branding>
         <color type="primary" scheme_preference="light">#708FFE</color>
@@ -54,12 +60,6 @@
 
     <content_rating type="oars-1.1"/>
 
-    <kudos>
-        <kudo>ModernToolkit</kudo>
-        <kudo>HiDpiIcon</kudo>
-        <kudo>Notifications</kudo>
-    </kudos>
-
     <releases>
         <release date="2024-10-13" version="0.15.0">
             <description>
@@ -71,5 +71,7 @@
     <url type="homepage">https://github.com/BuonHobo/Katharsis</url>
     <url type="bugtracker">https://github.com/BuonHobo/Katharsis/issues</url>
     <url type="vcs-browser">https://github.com/BuonHobo/Katharsis</url>
+    <url type="contact">https://fosstodon.org/@buonhobo</url>
+    <url type="contribute">https://github.com/BuonHobo/Katharsis</url>
     <update_contact>bnnalx@gmail.com</update_contact>
 </component>
